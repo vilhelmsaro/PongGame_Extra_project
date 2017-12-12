@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Pong game(multyplayer)</title>
+    </head>
+
+    <body>
+        <canvas id='canvas' width='1200' height='800'></canvas>
+        <script>
+            const canvas = document.getElementById("canvas");
+            const ctx = canvas.getContext("2d");
+
+
+
+
+            const score = {
+                right: 0,
+                left: 0
+            }
+
+
+
+
+            const Objets = {
+
+                ball: {
+                    x: 590,
+                    y: 390,
+                    w: 20,
+                    h: 20,
+                    clr: 'black',
+                    xD: 10,
+                    yD: 4
+
+                },
+
+                paddleRight: {
+                    x: 1180,
+                    y: 335,
+                    w: 10,
+                    h: 130,
+                    clr: 'black',
+                },
+
+                paddleLeft: {
+                    x: 10,
+                    y: 335,
+                    w: 10,
+                    h: 130,
+                    clr: 'black',
+                },
+            }
+
+
+
+
+
+            const draw = function() {
+
+                ctx.fillStyle = 'Gainsboro';
+                ctx.fillRect(0, 0, 1200, 800);
+
+                ctx.font = "600px Comic Sans MS";
+                ctx.fillStyle = 'white';
+                ctx.fillText(score.left, 50, 600);
+                ctx.fillText(score.right, 750, 600);
+
+                ctx.fillStyle = Objets.paddleRight.clr;
+                ctx.fillRect(Objets.paddleRight.x, Objets.paddleRight.y, Objets.paddleRight.w, Objets.paddleRight.h);
+
+                ctx.fillStyle = Objets.paddleLeft.clr;
+                ctx.fillRect(Objets.paddleLeft.x, Objets.paddleLeft.y, Objets.paddleLeft.w, Objets.paddleLeft.h);
+
+                ctx.fillStyle = Objets.ball.clr;
+                ctx.fillRect(Objets.ball.x, Objets.ball.y, Objets.ball.w, Objets.ball.h);
+
+            }
+
+
+
+
+
+
+
+            const update = function() {
+
+                Objets.ball.x = Objets.ball.x + Objets.ball.xD;
+                Objets.ball.y = Objets.ball.y + Objets.ball.yD;
+
+
+                if (Objets.ball.y <= 0) {
+                    Objets.ball.yD = -Objets.ball.yD;
+                } else if (Objets.ball.y >= 780) {
+                    Objets.ball.yD = -Objets.ball.yD;
+                }
+
+                if (Objets.ball.x <= -10) { //left
+                    //alert('lose');
+                    score.right += 1;
+                    Objets.ball.xD = -Objets.ball.xD;
+
+                } else if (Objets.ball.x >= 1200) { //right
+                    //alert('lose2');
+                    score.left += 1;
+                    Objets.ball.xD = -Objets.ball.xD;
+                }
+
+                if (Objets.paddleLeft.y <= 0) {
+                    Objets.paddleLeft.y = 0;
+                } else if (Objets.paddleLeft.y >= 670) {
+                    Objets.paddleLeft.y = 670;
+                }
+
+                if (Objets.paddleRight.y <= 0) {
+                    Objets.paddleRight.y = 0;
+                } else if (Objets.paddleRight.y >= 670) {
+                    Objets.paddleRight.y = 670;
+                }
+
+
+                if (Objets.ball.x <= Objets.paddleRight.x + Objets.paddleRight.w && Objets.ball.x + Objets.ball.w >= Objets.paddleRight.x && Objets.ball.y <= Objets.paddleRight.y + Objets.paddleRight.h && Objets.ball.y + Objets.ball.h >= Objets.paddleRight.y) {
+
+                    Objets.ball.xD = -Objets.ball.xD;
+                }
+                if (Objets.ball.x  <= Objets.paddleLeft.x + Objets.paddleLeft.w && Objets.ball.x + Objets.ball.w >= Objets.paddleLeft.x && Objets.ball.y <= Objets.paddleLeft.y + Objets.paddleLeft.h && Objets.ball.y + Objets.ball.h >= Objets.paddleLeft.y) {
+
+                    Objets.ball.xD = -Objets.ball.xD;
+                }
+
+
+                if (score.left >= 7 || score.right >= 7) {
+
+                    score.left = 0;
+                    score.right = 0;
+                    Objets.ball.x = 590;
+                    Objets.ball.y = 390;
+
+
+                }
+
+              
+            
+            }
+
+
+ 
+
+
+
+
+
+
+            const loop = function() {
+                draw();
+                update();
+                requestAnimationFrame(loop);
+
+            }
+
+
+
+
+
+
+            loop();
+
+
+
+
+
+
+            document.addEventListener('keydown', function(event) {
+
+                if (event.keyCode === 38) {
+                    Objets.paddleRight.y -= 40;
+                } else if (event.keyCode === 40) {
+                    Objets.paddleRight.y += 40;
+                }
+
+                if (event.keyCode === 87) {
+                    Objets.paddleLeft.y -= 40;
+                } else if (event.keyCode === 83) {
+                    Objets.paddleLeft.y += 40;
+                }
+
+            }, false);
+
+        </script>
+    </body>
+
+</html>
